@@ -17,11 +17,20 @@
     <properties>
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
-    
+    </properties>    
     
     
     <dependencies>  
+        <dependency>
+            <groupId>org.fusesource.stompjms</groupId>
+            <artifactId>stompjms-client</artifactId>
+            <version>1.19</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>activemq-all</artifactId>
+            <version>5.10.0</version>
+        </dependency>
         <dependency>
             <groupId>org.primefaces</groupId>
             <artifactId>primefaces</artifactId>

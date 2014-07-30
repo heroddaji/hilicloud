@@ -1,5 +1,5 @@
 
-package im.framework.api.rest;
+package im.framework.api.server.rest;
 
 import javax.inject.Inject;
 import javax.servlet.Servlet;
@@ -12,6 +12,6 @@ import javax.ws.rs.core.Application;
 
 @ApplicationPath("/")
 public class RestApp extends Application{
-  
-            
+   
+           
 }

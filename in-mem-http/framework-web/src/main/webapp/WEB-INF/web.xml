@@ -21,4 +21,7 @@
     <welcome-file-list>
         <welcome-file>faces/index.xhtml</welcome-file>
     </welcome-file-list>
+    <listener>
+        <listener-class>im.framework.api.server.servlet.InitServletContext</listener-class>
+    </listener>
 </web-app>

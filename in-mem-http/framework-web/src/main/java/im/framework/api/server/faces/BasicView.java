@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package im.framework.api.faces;
+package im.framework.api.server.faces;
 
 import javax.faces.bean.ManagedBean;
 

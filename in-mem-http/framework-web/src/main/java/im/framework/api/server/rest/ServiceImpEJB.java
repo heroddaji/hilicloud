@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package im.framework.api.rest;
+package im.framework.api.server.rest;
 
 import javax.ejb.Stateless;
 
