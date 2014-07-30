@@ -13,17 +13,12 @@ import javax.ws.rs.Path;
  * @author dai
  */
 @Path("rest")
-public interface ServiceIntRest {
-    
-    public int doSomething();
-    
+public interface ServiceIntRest {    
+   
     @GET
     @Path("info/nodes")
-    public int getNumberOfNodes();
-    
-    @GET
-    @Path("jms/test")
-    public int test();
+    public int getNumberOfNodes();    
+   
 
     
 }

@@ -19,7 +19,7 @@ import javax.jms.MessageListener;
 import javax.jms.Queue;
 import javax.jms.Topic;
 
-@MessageDriven(mappedName = "jms/frameworkTopic")
+
 public class JmsService implements MessageListener {
 
     @Override
