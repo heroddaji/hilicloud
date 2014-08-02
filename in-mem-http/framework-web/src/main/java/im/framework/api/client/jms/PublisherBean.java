@@ -27,51 +27,54 @@ import javax.jms.Topic;
 import org.fusesource.stomp.jms.StompJmsConnectionFactory;
 import org.fusesource.stomp.jms.StompJmsDestination;
 
-
 public class PublisherBean {
 
     private static String remoteHost = "163.180.116.93";
     private static String remotePort = "61613";
     private static Logger logger = Logger.getLogger("JmsService");
-    
-    public void send() throws JMSException{
-        String user = "admin";
-        String password = "password";
-        String host = remoteHost;
-        int port = Integer.parseInt(remotePort);
-        String destination = "/topic/event";
-        
-        int messages = 10000;
-        int size = 256;
 
-        String DATA = "abcdefghijklmnopqrstuvwxyz";
-        String body = "";
-        for( int i=0; i < size; i ++) {
-            body += DATA.charAt(i%DATA.length());
-        }
+    public void register() {
+        try {
 
-        StompJmsConnectionFactory factory = new StompJmsConnectionFactory();
-        factory.setBrokerURI("tcp://" + host + ":" + port);
+            String user = "admin";
+            String password = "password";
+            String host = remoteHost;
+            int port = Integer.parseInt(remotePort);
+            String destination = "/topic/event";
 
-        Connection connection = factory.createConnection(user, password);
-        connection.start();
-        Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-        Destination dest = new StompJmsDestination(destination);
-        MessageProducer producer = session.createProducer(dest);
-        producer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
+            int messages = 10000;
+            int size = 256;
 
-        for( int i=1; i <= messages; i ++) {
-            TextMessage msg = session.createTextMessage(body);
-            msg.setIntProperty("id", i);
-            producer.send(msg);
-            if( (i % 1000) == 0) {
-                logger.info(String.format("Sent %d messages", i));
+            String DATA = "abcdefghijklmnopqrstuvwxyz";
+            String body = "";
+            for (int i = 0; i < size; i++) {
+                body += DATA.charAt(i % DATA.length());
             }
-        }
 
-        //producer.send(session.createTextMessage("SHUTDOWN"));
-        connection.close();
-              
-    }     
+            StompJmsConnectionFactory factory = new StompJmsConnectionFactory();
+            factory.setBrokerURI("tcp://" + host + ":" + port);
+
+            Connection connection = factory.createConnection(user, password);
+            connection.start();
+            Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+            Destination dest = new StompJmsDestination(destination);
+            MessageProducer producer = session.createProducer(dest);
+            producer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
+
+            for (int i = 1; i <= messages; i++) {
+                TextMessage msg = session.createTextMessage(body);
+                msg.setIntProperty("id", i);
+                producer.send(msg);
+                if ((i % 1000) == 0) {
+                    logger.info(String.format("Sent %d messages", i));
+                }
+            }
+
+            //producer.send(session.createTextMessage("SHUTDOWN"));
+            connection.close();
+        } catch (JMSException e) {
+
+        }
+    }
 
 }

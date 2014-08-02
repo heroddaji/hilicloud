@@ -27,15 +27,10 @@ public class ServiceImpEJB implements ServiceIntRest {
     }
 
     @Override
-    public int registerToMasterController() {
-        try {
-            new PublisherBean().send();
+    public int registerToMasterController() {      
+            new PublisherBean().register();
             return 1;
-        } catch (JMSException ex) {
-            Logger.getLogger(ServiceImpEJB.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        return 1;
+      
     }
     
 

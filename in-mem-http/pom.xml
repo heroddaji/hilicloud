@@ -8,7 +8,6 @@
   <name>in-mem-http</name>
   <modules>
     <module>framework-ear</module>
-    <module>framework-web</module>
     <module>framework-ejb</module>
   </modules>
 </project>
