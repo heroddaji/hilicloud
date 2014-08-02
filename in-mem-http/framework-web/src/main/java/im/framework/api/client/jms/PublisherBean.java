@@ -28,13 +28,13 @@ import org.fusesource.stomp.jms.StompJmsConnectionFactory;
 import org.fusesource.stomp.jms.StompJmsDestination;
 
 
-public class Publisher {
+public class PublisherBean {
 
     private static String remoteHost = "163.180.116.93";
     private static String remotePort = "61613";
     private static Logger logger = Logger.getLogger("JmsService");
     
-    public void registerWithMasterController() throws JMSException{
+    public void send() throws JMSException{
         String user = "admin";
         String password = "password";
         String host = remoteHost;
@@ -69,7 +69,7 @@ public class Publisher {
             }
         }
 
-        producer.send(session.createTextMessage("SHUTDOWN"));
+        //producer.send(session.createTextMessage("SHUTDOWN"));
         connection.close();
               
     }     

@@ -18,6 +18,11 @@ public interface ServiceIntRest {
     @GET
     @Path("info/nodes")
     public int getNumberOfNodes();    
+    
+    
+    @GET
+    @Path("client/register")
+    public int registerToMasterController();    
    
 
     

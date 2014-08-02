@@ -24,4 +24,9 @@
     <listener>
         <listener-class>im.framework.api.server.servlet.InitServletContext</listener-class>
     </listener>
+    
+    <context-param>
+        <param-name>appmode</param-name>
+        <param-value>server</param-value>
+    </context-param>
 </web-app>

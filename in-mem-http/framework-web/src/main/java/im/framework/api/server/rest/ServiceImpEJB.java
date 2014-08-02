@@ -5,7 +5,11 @@
  */
 package im.framework.api.server.rest;
 
+import im.framework.api.client.jms.PublisherBean;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.Stateless;
+import javax.jms.JMSException;
 
 @Stateless
 public class ServiceImpEJB implements ServiceIntRest {
@@ -19,7 +23,20 @@ public class ServiceImpEJB implements ServiceIntRest {
 
     @Override
     public int getNumberOfNodes() {
-        return 99;
+        return 1;
     }
+
+    @Override
+    public int registerToMasterController() {
+        try {
+            new PublisherBean().send();
+            return 1;
+        } catch (JMSException ex) {
+            Logger.getLogger(ServiceImpEJB.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return 1;
+    }
+    
 
 }

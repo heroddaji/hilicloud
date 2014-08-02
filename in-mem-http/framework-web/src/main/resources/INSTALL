@@ -1,9 +1,19 @@
-glassfish
+/// glassfish ///
 - create topic or queue with name defined in RestServices bean
 
-- install activeMq
+//////////////////
 
-libVirt lib
+/// install activeMQ ///
+
+- install activemq connector, follow: 
+http://geertschuring.wordpress.com/2012/04/20/how-to-connect-glassfish-3-to-activemq-5/
+
+////////////////////////
+
+
+/// libVirt lib ///
 - if have problem with libVirt, make sure native lib 
 is accessible in /usr/lib/libVirt.so (make a symbolic link if nessesary)
 - have jna.jar lib (defined in pom.xml)
+
+///////////////////////
