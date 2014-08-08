@@ -10,14 +10,16 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.validator.constraints.Length;
 
 
-public class Status {
+public class FrameworkStatus {
     private long id;    
     
     private String content;
     
-    public Status(){}
+    private int activeVms = 0;
+    
+    public FrameworkStatus(){}
 
-    public Status(long id, String content) {
+    public FrameworkStatus(long id, String content) {
         this.id = id;
         this.content = content;
     }
@@ -30,6 +32,15 @@ public class Status {
     @JsonProperty
     public String getContent() {
         return content;
+    }
+
+    @JsonProperty
+    public int getActiveVms() {
+        return activeVms;
+    }
+
+    public void increaseActiveVms() {
+        this.activeVms++;
     }
     
     

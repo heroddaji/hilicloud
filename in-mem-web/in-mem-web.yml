@@ -68,4 +68,9 @@ logging:
     - type: console
 
 activeMQ:
-  brokerUrl: tcp://localhost:61616
+  brokerUrl: tcp://163.180.116.93:61616
+  
+queueName: inmemQueue
+topicName: inmemTopic
+appmode: server
+

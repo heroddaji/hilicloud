@@ -21,6 +21,19 @@ public class WebConfiguration extends Configuration implements ActiveMQConfigHol
     @Valid
     private ActiveMQConfig activeMQ;
     
+    @JsonProperty
+    @NotNull    
+    private String queueName;
+    
+    @JsonProperty
+    @NotNull    
+    private String topicName;
+    
+    @JsonProperty
+    @NotNull    
+    private String appMode;
+
+   
     @NotEmpty
     private String template;
 
@@ -30,7 +43,8 @@ public class WebConfiguration extends Configuration implements ActiveMQConfigHol
     @Valid
     @NotNull
     private DataSourceFactory database = new DataSourceFactory();
-
+    
+   
     @JsonProperty
     public String getTemplate() {
         return template;
@@ -67,4 +81,34 @@ public class WebConfiguration extends Configuration implements ActiveMQConfigHol
     public ActiveMQConfig getActiveMQ() {
          return activeMQ;
     }
+
+     public String getQueueName() {
+        return queueName;
+    }
+
+    public String getTopicName() {
+        return topicName;
+    }
+
+    public void setTopicName(String topicName) {
+        this.topicName = topicName;
+    }
+
+    public String getAppMode() {
+        return appMode;
+    }
+
+    public void setAppMode(String appMode) {
+        this.appMode = appMode;
+    }
+
+    public DataSourceFactory getDatabase() {
+        return database;
+    }
+
+    public void setDatabase(DataSourceFactory database) {
+        this.database = database;
+    }
+    
+    
 }
