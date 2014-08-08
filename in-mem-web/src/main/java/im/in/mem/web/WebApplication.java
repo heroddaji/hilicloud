@@ -27,7 +27,7 @@ public class WebApplication extends Application<WebConfiguration> {
 
     private static WebApplication INSTANCE = null;
 
-    private static FrameworkStatus frameworkStatus;
+    private static FrameworkStatus frameworkStatus = new FrameworkStatus(1,"Framwork status");
 
     private WebApplication() {
     }

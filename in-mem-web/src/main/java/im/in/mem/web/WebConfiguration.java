@@ -102,13 +102,7 @@ public class WebConfiguration extends Configuration implements ActiveMQConfigHol
         this.appMode = appMode;
     }
 
-    public DataSourceFactory getDatabase() {
-        return database;
-    }
-
-    public void setDatabase(DataSourceFactory database) {
-        this.database = database;
-    }
+   
     
     
 }

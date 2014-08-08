@@ -72,5 +72,5 @@ activeMQ:
   
 queueName: inmemQueue
 topicName: inmemTopic
-appmode: server
+appMode: server
 
