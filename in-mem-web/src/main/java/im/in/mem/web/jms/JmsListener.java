@@ -7,21 +7,19 @@
 package im.in.mem.web.jms;
 
 import com.kjetland.dropwizard.activemq.ActiveMQReceiver;
+import im.in.mem.web.Constant;
 import im.in.mem.web.WebApplication;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class JmsListener implements ActiveMQReceiver<JmsMessage>{
+public class JmsListener implements ActiveMQReceiver<JsonMessage>{
     
     private final Logger log = LoggerFactory.getLogger(getClass());
     
     @Override
-    public void receive(JmsMessage message) {
-        log.info("get message:" + message);
+    public void receive(JsonMessage jsonMessage) {
+        log.info("get message:" + jsonMessage);        
         
-        if (message.getContent().equals("register")){
-            WebApplication.getFrameworkStatus().increaseActiveVms();
-        }
     }    
     
 }

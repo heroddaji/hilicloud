@@ -11,41 +11,36 @@ import im.in.mem.web.WebConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class JmsManager {
+public class JmsHandler {
 
     private final ActiveMQBundle activeMQBundle;
     private final Logger log = LoggerFactory.getLogger(getClass());
     private WebConfiguration config;
+    private ActiveMQSender sender;
 
-    public JmsManager() {
+    public JmsHandler() {
         this.activeMQBundle = new ActiveMQBundle();
+
     }
 
-    public ActiveMQSender createSender() {
-
+    public void init(WebConfiguration config) {
+        this.config = config;
+        
+        log.info("create queue/topic in activemq");
         String destination = config.getQueueName();
-
-        ActiveMQSender activeMQSender = activeMQBundle.createSender(destination, false);
-        return activeMQSender;
-
-    }
-
-    public void registerListener(String destination) {
-        log.info("register listener on destination :" + destination);
+        sender = activeMQBundle.createSender(destination, true);
+        
+        log.info("register listener on destination: " + config.getQueueName());
         JmsListener listener = new JmsListener();
-        activeMQBundle.registerReceiver(destination, listener, JmsMessage.class, true);
+        activeMQBundle.registerReceiver(destination, listener, JsonMessage.class, true);
     }
 
     public ActiveMQBundle getActiveMQBundle() {
         return activeMQBundle;
     }
 
-    public WebConfiguration getConfig() {
-        return config;
-    }
-
-    public void setConfig(WebConfiguration config) {
-        this.config = config;
+    public ActiveMQSender getSender() {
+        return sender;
     }
 
 }

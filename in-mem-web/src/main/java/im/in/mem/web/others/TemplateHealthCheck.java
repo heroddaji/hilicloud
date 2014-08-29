@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package im.in.mem.web.health;
+package im.in.mem.web.others;
 
 import com.codahale.metrics.health.HealthCheck;
 

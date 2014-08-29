@@ -31,7 +31,7 @@ server:
     - type: http
       port: 8080
     - type: https
-      port: 8443
+      port: 8443        
       keyStorePath: example.keystore
       keyStorePassword: example
       validateCerts: false
@@ -72,5 +72,5 @@ activeMQ:
   
 queueName: inmemQueue
 topicName: inmemTopic
-appMode: server
+appMode: controller
 
