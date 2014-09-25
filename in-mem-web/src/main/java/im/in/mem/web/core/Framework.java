@@ -4,22 +4,22 @@
  * and open the template in the editor.
  */
 
-package im.in.mem.web.controller;
+package im.in.mem.web.core;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.validator.constraints.Length;
 
 
-public class FrameworkStatus {
+public class Framework {
     private long id;    
     
     private String content;
     
     private int activeVms = 0;
     
-    public FrameworkStatus(){}
+    public Framework(){}
 
-    public FrameworkStatus(long id, String content) {
+    public Framework(long id, String content) {
         this.id = id;
         this.content = content;
     }

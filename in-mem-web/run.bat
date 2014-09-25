@@ -1,0 +1,1 @@
+java -jar E:\Dropbox\dev\in-mem\in-mem-web\target\in-mem-web-1.0-SNAPSHOT.jar server E:\Dropbox\dev\in-mem\in-mem-web\in-mem-web2.yml

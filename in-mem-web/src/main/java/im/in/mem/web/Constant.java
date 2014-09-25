@@ -11,12 +11,13 @@ package im.in.mem.web;
  * @author dai
  */
 public class Constant {
-    final static String APPMODE_SERVICE = "service";
-    final static String APPMODE_CONTROLLER = "controller";
-    final static String APPMODE_BALANCER = "balancer";
-    final static String APPMODE_HYPERVISOR = "hypervisor";
+    public final static String APPMODE_SERVICE = "service";
+    public final static String APPMODE_CONTROLLER = "controller";
+    public final static String APPMODE_BALANCER = "balancer";
+    public final static String APPMODE_HYPERVISOR = "hypervisor";
     
-    final static String MESSAGETYPE_REGISTER = "register";
+    public final static String MESSAGETYPE_REGISTER = "register";
+    
     
     
     

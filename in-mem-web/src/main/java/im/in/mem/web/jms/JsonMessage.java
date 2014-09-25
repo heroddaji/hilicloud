@@ -17,6 +17,9 @@ public class JsonMessage  {
     @JsonProperty
     private String paypload;
    
+    @JsonProperty
+    private String role;
+    
     public JsonMessage(){}
 
     public String getType() {
@@ -33,6 +36,19 @@ public class JsonMessage  {
 
     public void setPaypload(String paypload) {
         this.paypload = paypload;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    @Override
+    public String toString() {
+        return "JsonMessage{" + "type=" + type + ", paypload=" + paypload + ", role=" + role + '}';
     }
 
   

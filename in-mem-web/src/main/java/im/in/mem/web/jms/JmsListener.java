@@ -18,7 +18,9 @@ public class JmsListener implements ActiveMQReceiver<JsonMessage>{
     
     @Override
     public void receive(JsonMessage jsonMessage) {
-        log.info("get message:" + jsonMessage);        
+        if(jsonMessage.getType().equals(Constant.MESSAGETYPE_REGISTER)){
+            log.info("receive message:" + jsonMessage.toString());
+        }
         
     }    
     

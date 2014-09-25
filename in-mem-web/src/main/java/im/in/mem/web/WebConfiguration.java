@@ -12,10 +12,14 @@ import io.dropwizard.Configuration;
 import io.dropwizard.db.DataSourceFactory;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import org.bson.types.ObjectId;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.mongodb.morphia.annotations.Id;
 
 public class WebConfiguration extends Configuration implements ActiveMQConfigHolder{
 
+     @Id private ObjectId id;
+    
     @JsonProperty
     @NotNull
     @Valid

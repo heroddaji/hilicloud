@@ -5,19 +5,25 @@
  */
 package im.in.mem.web;
 
-import im.in.mem.web.balancer.RestResource;
-import im.in.mem.web.controller.FrameworkStatus;
+import com.mongodb.DB;
+import com.mongodb.DBObject;
+import com.mongodb.Mongo;
+import com.mongodb.MongoClient;
+import im.in.mem.web.balancer.Balancer;
+import im.in.mem.web.balancer.rest.HiLiCloudRest;
+import im.in.mem.web.balancer.rest.UsersRest;
+import im.in.mem.web.controller.Controller;
+import im.in.mem.web.core.Framework;
+import im.in.mem.web.core.Root;
+import im.in.mem.web.dao.User;
 import im.in.mem.web.jms.JmsHandler;
 import im.in.mem.web.jms.JsonMessage;
 import im.in.mem.web.others.TemplateHealthCheck;
 import io.dropwizard.Application;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
-import javax.jms.Message;
-import javax.jms.Session;
-import javax.jms.TextMessage;
-import org.apache.activemq.command.ActiveMQMessage;
-import org.apache.activemq.command.ActiveMQTextMessage;
+import org.mongodb.morphia.Datastore;
+import org.mongodb.morphia.Morphia;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,9 +35,10 @@ public class WebApplication extends Application<WebConfiguration> {
 
     private JmsHandler jmsHandler;
     private static WebApplication INSTANCE = null;
-    private WebConfiguration configuration;
-    private static FrameworkStatus frameworkStatus = new FrameworkStatus(1,"Framwork status");
+    private WebConfiguration config;
+    private static Framework frameworkStatus = new Framework(1, "Framwork status");
     private final Logger log = LoggerFactory.getLogger(getClass());
+    
 
     private WebApplication() {
     }
@@ -54,65 +61,81 @@ public class WebApplication extends Application<WebConfiguration> {
 
     @Override
     public void initialize(Bootstrap<WebConfiguration> configBootstrap) {
+        log.info("bootstrap  jms handler");        
         jmsHandler = new JmsHandler();
-        configBootstrap.addBundle(jmsHandler.getActiveMQBundle());
-
+        configBootstrap.addBundle(jmsHandler.getActiveMQBundle()); 
     }
 
     @Override
-    public void run(WebConfiguration _configuration, Environment environment) throws Exception {
-        this.configuration = _configuration;
+    public void run(WebConfiguration _config, Environment environment) throws Exception {
+        this.config = _config;
+        jmsHandler.init(_config);
+        final HiLiCloudRest hiliResource = new HiLiCloudRest(config.getTemplate(), config.getDefaultName());
+        final UsersRest userResource = new UsersRest();
         
-        final RestResource resource = new RestResource(configuration.getTemplate(), configuration.getDefaultName());
-        final TemplateHealthCheck healthCheck = new TemplateHealthCheck(configuration.getTemplate());
+        final TemplateHealthCheck healthCheck = new TemplateHealthCheck(config.getTemplate());
         environment.healthChecks().register("template", healthCheck);
-        environment.jersey().register(resource);
+        environment.jersey().register(hiliResource);
+        environment.jersey().register(userResource);
         
-        log.info("init jms handler");
-        jmsHandler.init(configuration);
+        //TODO: handle if activemq is working or not
+        // or add embbeded activemq server
         
-        registerComponentsToController();
+        registerComponents();
         
+        Morphia morphia = new Morphia();
+        MongoClient mgClient = new MongoClient();
+        Datastore ds = morphia.createDatastore(mgClient, "hilicloud");
+        ds.ensureIndexes();
+        ds.ensureCaps();
         
+        User user = new User("dai", "admin", "aaa");
+        User user2 = new User("dai2", "admin", "aaa");
+        ds.save(user);
+        ds.save(user2);        
+
     }
 
-    public JmsHandler getJmsManager() {
-        return jmsHandler;
-    }
-
-    public static FrameworkStatus getFrameworkStatus() {
+    public static Framework getFrameworkStatus() {
         return frameworkStatus;
     }
-    
-    private void registerComponentsToController(){
-        
+
+    private void registerComponents() {
+        //Controller.Haha h = new Controller.Haha();
+        Controller.Shaha h2 = new Controller.Shaha();
+        log.info("create resiter message");
         JsonMessage registeringMessage = new JsonMessage();
         registeringMessage.setType(Constant.MESSAGETYPE_REGISTER);
         registeringMessage.setPaypload(getInstance().toString());
-        
-        
-        if(configuration.getAppMode().equals(Constant.APPMODE_CONTROLLER)){
-            //testing purpose
-            jmsHandler.getSender().send((Session session) ->{
-                TextMessage message = session.createTextMessage();
-                message.setText("hrhr");
-                message.setJMSCorrelationID("balancer");
-                return message;
-            });
+
+        if (config.getAppMode().equals(Constant.APPMODE_CONTROLLER)) {
+            log.info("init controller");
+            Controller controller = new Controller();            
+            controller.init(config);
+            controller.setJmsHandler(jmsHandler);
+            registeringMessage.setRole(Constant.APPMODE_CONTROLLER);
+            controller.getJmsHandler().getSenderToController().send(registeringMessage);
+
+        } else if (config.getAppMode().equals(Constant.APPMODE_BALANCER)) {
+            log.info("init balancer");
+            Balancer balancer = new Balancer();            
+            balancer.init(config);
+            balancer.setJmsHandler(jmsHandler);
+
+            registeringMessage.setRole(Constant.APPMODE_BALANCER);
+            balancer.getJmsHandler().getSenderToController().send(registeringMessage);
+
+        } else if (config.getAppMode().equals(Constant.APPMODE_SERVICE)) {
+            registeringMessage.setRole(Constant.APPMODE_SERVICE);
+            jmsHandler.getSenderToController().send(registeringMessage);
+        } else if (config.getAppMode().equals(Constant.APPMODE_HYPERVISOR)) {
+            registeringMessage.setRole(Constant.APPMODE_HYPERVISOR);
+            jmsHandler.getSenderToController().send(registeringMessage);
         }
-        else if(configuration.getAppMode().equals(Constant.APPMODE_BALANCER)){
-            jmsHandler.getSender().send((Session session) ->{
-                TextMessage message = session.createTextMessage();
-                message.setText(registeringMessage.toString());
-                message.setJMSCorrelationID("balancer");
-                return message;
-            });
-        }
-        else if(configuration.getAppMode().equals(Constant.APPMODE_SERVICE)){
-            //register to controller
-        }
-        else if(configuration.getAppMode().equals(Constant.APPMODE_HYPERVISOR)){
-            
-        }
+
+    }
+
+    public WebConfiguration getConfiguration() {
+        return config;
     }
 }

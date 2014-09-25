@@ -3,62 +3,63 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package im.in.mem.web.balancer;
+package im.in.mem.web.balancer.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import com.google.common.base.Optional;
 import im.in.mem.web.WebApplication;
 import im.in.mem.web.benchmark.BenchmarkService;
-import im.in.mem.web.controller.FrameworkStatus;
+import im.in.mem.web.core.Framework;
 import im.in.mem.web.jms.JmsHandler;
-import im.in.mem.web.jms.JsonMessage;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.concurrent.atomic.AtomicLong;
 import javax.jms.JMSException;
-import javax.jms.TextMessage;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
-import org.apache.activemq.command.ActiveMQTextMessage;
 
-@Path("/mcimbs")
+@Path("/hilicloud")
 @Produces(MediaType.APPLICATION_JSON)
-public class RestResource {
+public class HiLiCloudRest {
 
     private final String template;
     private final String defaultName;
     private final AtomicLong counter;
+    //UsersRest userRest ;
 
-    public RestResource(String template, String defaultName) {
+    public HiLiCloudRest(String template, String defaultName) {
         this.template = template;
         this.defaultName = defaultName;
         this.counter = new AtomicLong();
+        
+       // userRest = new UsersRest();
     }
 
     @GET
     @Timed
-    public FrameworkStatus sayHello(@QueryParam("name") Optional<String> name) {
+    public Framework sayHello(@QueryParam("name") Optional<String> name) {
         final String value = String.format(template, name.or(defaultName));
-        return new FrameworkStatus(counter.incrementAndGet(), value);
+        return new Framework(counter.incrementAndGet(), value);
     }
 
     @GET
-    @Path("register")
+    @Path("test/register")
     public int testJms() throws JMSException {
-        JmsHandler jmsManager = WebApplication.getInstance().getJmsManager();
-      //  JsonMessage jmsMes = new JsonMessage("register");
+        
+    
+        //  JsonMessage jmsMes = new JsonMessage("register");
         //jmsManager.createSender().send(jmsMes);
 
         return 1;
     }
 
-    @GET
-    @Path("status")
-    public FrameworkStatus status() {
-        return WebApplication.getFrameworkStatus();
-    }
+    
+  
 
     @GET
     @Path("benchmark")
@@ -92,6 +93,14 @@ public class RestResource {
     @Path("benchmark/mem")
     public String benchmarkMem() {
         return "mem  - test memory\n";
+
+    }
+    
+    @GET
+    @Path("benchmark/test")
+    public String benchmarkTest() throws IOException {
+        java.nio.file.Path file = Paths.get("/media/disk6/Dropbox/dev/in-mem/in-mem-web/src/main/resources/im/in/mem/web/resources/rest.txt");
+        return Files.readAllLines(file).toString();
 
     }
 }
