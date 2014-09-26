@@ -5,29 +5,38 @@
  */
 package im.in.mem.web.balancer.rest;
 
+import com.google.common.base.Optional;
 import com.mongodb.MongoClient;
 import im.in.mem.web.dao.User;
 import java.net.UnknownHostException;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Morphia;
 import org.mongodb.morphia.query.Query;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Path("users")
 @Produces(MediaType.APPLICATION_JSON)
 public class UsersRest {
 
+    @QueryParam("query")
+    String param;
+    
     Morphia morphia;
     Datastore ds;
     MongoClient mongoClient;
     String dbName = "hilicloud";
+    
+    private final Logger log = LoggerFactory.getLogger(getClass());
     
     public UsersRest(){
         
@@ -36,15 +45,28 @@ public class UsersRest {
             morphia = new Morphia();        
             ds = morphia.createDatastore(mongoClient, dbName);
         } catch (UnknownHostException ex) {
-            Logger.getLogger(UsersRest.class.getName()).log(Level.SEVERE, null, ex);
+            log.error(ex.getMessage());
         }
     }
     
     @GET    
-    public List<User> getAllUsers() {
+    public List<User> getAllUsers(@QueryParam("query") String methodQuery) {
         Query q = ds.find(User.class);
         
+        
+        
         return q.asList();
+    }
+    
+    @POST
+    public String register(@QueryParam("email") Optional<String> email){
+        
+        return "ge";
+    }
+    
+    @Path("/{email}")
+    public User getUser(@PathParam("email") String email){
+        return null;
     }
 
 }

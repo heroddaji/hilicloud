@@ -22,8 +22,10 @@ import im.in.mem.web.others.TemplateHealthCheck;
 import io.dropwizard.Application;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
+import io.dropwizard.views.ViewBundle;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Morphia;
+import org.mongodb.morphia.query.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -60,10 +62,11 @@ public class WebApplication extends Application<WebConfiguration> {
     }
 
     @Override
-    public void initialize(Bootstrap<WebConfiguration> configBootstrap) {
+    public void initialize(Bootstrap<WebConfiguration> bootstrap) {
         log.info("bootstrap  jms handler");        
         jmsHandler = new JmsHandler();
-        configBootstrap.addBundle(jmsHandler.getActiveMQBundle()); 
+        bootstrap.addBundle(jmsHandler.getActiveMQBundle()); 
+        bootstrap.addBundle(new ViewBundle());
     }
 
     @Override
@@ -93,6 +96,9 @@ public class WebApplication extends Application<WebConfiguration> {
         User user2 = new User("dai2", "admin", "aaa");
         ds.save(user);
         ds.save(user2);        
+        
+         Query q = ds.find(User.class);
+         log.debug(q.asList().toString());
 
     }
 
