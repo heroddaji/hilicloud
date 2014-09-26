@@ -1,3 +1,4 @@
-in-mem
+HiLiCloud
 ======
-haha
+Framework for Cloud Monitoring Resources.
+Optimize for mobile usage
