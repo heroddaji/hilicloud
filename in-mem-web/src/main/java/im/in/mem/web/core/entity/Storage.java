@@ -4,12 +4,12 @@
  * and open the template in the editor.
  */
 
-package im.in.mem.web.vm;
+package im.in.mem.web.core.entity;
 
 /**
  *
  * @author dai
  */
-public class VirtualMachine {
+public class Storage {
     
 }

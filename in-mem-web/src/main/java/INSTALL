@@ -2,3 +2,6 @@ NEED
 - mongodb
 - activemq
 
+
+Note:
+if have classnotfound problem, may be the morphia persist wrong classname in mongodb

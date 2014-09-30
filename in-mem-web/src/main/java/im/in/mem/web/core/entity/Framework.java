@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package im.in.mem.web.core;
+package im.in.mem.web.core.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.validator.constraints.Length;

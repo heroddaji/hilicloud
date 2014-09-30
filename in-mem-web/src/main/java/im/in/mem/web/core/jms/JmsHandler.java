@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package im.in.mem.web.jms;
+package im.in.mem.web.core.jms;
 
 import com.kjetland.dropwizard.activemq.ActiveMQBundle;
 import com.kjetland.dropwizard.activemq.ActiveMQSender;

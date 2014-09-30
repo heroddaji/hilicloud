@@ -7,8 +7,8 @@
 package im.in.mem.web.controller;
 
 import im.in.mem.web.WebConfiguration;
-import im.in.mem.web.core.Root;
-import im.in.mem.web.jms.JmsHandler;
+import im.in.mem.web.core.entity.Root;
+import im.in.mem.web.core.jms.JmsHandler;
 import org.h2.server.web.WebApp;
 
 

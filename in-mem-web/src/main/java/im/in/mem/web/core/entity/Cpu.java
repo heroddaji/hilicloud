@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package im.in.mem.web.vm;
+package im.in.mem.web.core.entity;
 
 /**
  *

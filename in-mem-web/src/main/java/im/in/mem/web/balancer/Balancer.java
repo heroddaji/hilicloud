@@ -7,7 +7,7 @@
 package im.in.mem.web.balancer;
 
 import im.in.mem.web.WebConfiguration;
-import im.in.mem.web.core.Root;
+import im.in.mem.web.core.entity.Root;
 
 
 public class Balancer extends Root{

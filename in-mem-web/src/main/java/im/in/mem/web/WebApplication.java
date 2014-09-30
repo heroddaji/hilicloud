@@ -5,19 +5,16 @@
  */
 package im.in.mem.web;
 
-import com.mongodb.DB;
-import com.mongodb.DBObject;
-import com.mongodb.Mongo;
 import com.mongodb.MongoClient;
 import im.in.mem.web.balancer.Balancer;
 import im.in.mem.web.balancer.rest.HiLiCloudRest;
 import im.in.mem.web.balancer.rest.UsersRest;
 import im.in.mem.web.controller.Controller;
-import im.in.mem.web.core.Framework;
-import im.in.mem.web.core.Root;
-import im.in.mem.web.dao.User;
-import im.in.mem.web.jms.JmsHandler;
-import im.in.mem.web.jms.JsonMessage;
+import im.in.mem.web.core.entity.Framework;
+import im.in.mem.web.core.entity.User;
+
+import im.in.mem.web.core.jms.JmsHandler;
+import im.in.mem.web.core.jms.JsonMessage;
 import im.in.mem.web.others.TemplateHealthCheck;
 import io.dropwizard.Application;
 import io.dropwizard.setup.Bootstrap;
@@ -40,7 +37,6 @@ public class WebApplication extends Application<WebConfiguration> {
     private WebConfiguration config;
     private static Framework frameworkStatus = new Framework(1, "Framwork status");
     private final Logger log = LoggerFactory.getLogger(getClass());
-    
 
     private WebApplication() {
     }
@@ -62,43 +58,47 @@ public class WebApplication extends Application<WebConfiguration> {
     }
 
     @Override
-    public void initialize(Bootstrap<WebConfiguration> bootstrap) {
-        log.info("bootstrap  jms handler");        
-        jmsHandler = new JmsHandler();
-        bootstrap.addBundle(jmsHandler.getActiveMQBundle()); 
+    public void initialize(Bootstrap<WebConfiguration> bootstrap) {        
+//        jmsHandler = new JmsHandler();
+//        bootstrap.addBundle(jmsHandler.getActiveMQBundle());
         bootstrap.addBundle(new ViewBundle());
     }
 
     @Override
     public void run(WebConfiguration _config, Environment environment) throws Exception {
-        this.config = _config;
-        jmsHandler.init(_config);
-        final HiLiCloudRest hiliResource = new HiLiCloudRest(config.getTemplate(), config.getDefaultName());
-        final UsersRest userResource = new UsersRest();
-        
-        final TemplateHealthCheck healthCheck = new TemplateHealthCheck(config.getTemplate());
-        environment.healthChecks().register("template", healthCheck);
-        environment.jersey().register(hiliResource);
-        environment.jersey().register(userResource);
-        
+
+        try {
+
+            this.config = _config;
+        //    jmsHandler.init(_config);
+            final HiLiCloudRest hiliResource = new HiLiCloudRest(config.getTemplate(), config.getDefaultName());
+            final UsersRest userResource = new UsersRest();
+
+            final TemplateHealthCheck healthCheck = new TemplateHealthCheck(config.getTemplate());
+            environment.healthChecks().register("template", healthCheck);
+            environment.jersey().register(hiliResource);
+            environment.jersey().register(userResource);
+
         //TODO: handle if activemq is working or not
-        // or add embbeded activemq server
-        
-        registerComponents();
-        
-        Morphia morphia = new Morphia();
-        MongoClient mgClient = new MongoClient();
-        Datastore ds = morphia.createDatastore(mgClient, "hilicloud");
-        ds.ensureIndexes();
-        ds.ensureCaps();
-        
-        User user = new User("dai", "admin", "aaa");
-        User user2 = new User("dai2", "admin", "aaa");
-        ds.save(user);
-        ds.save(user2);        
-        
-         Query q = ds.find(User.class);
-         log.debug(q.asList().toString());
+            // or add embbeded activemq server
+            // registerComponents();
+            Morphia morphia = new Morphia();
+            MongoClient mgClient = new MongoClient();
+            Datastore ds = morphia.createDatastore(mgClient, "hilicloud");
+            ds.ensureIndexes();
+            ds.ensureCaps();
+
+            User user = new User("dai", "admin", "aaa");
+            User user2 = new User("dai2", "admin", "aaa");
+            ds.save(user);
+            ds.save(user2);
+
+            Query q = ds.find(User.class);
+            log.debug(q.asList().toString());
+
+        } catch (Exception ex) {
+               log.error(ex.getMessage());
+        }
 
     }
 
@@ -116,7 +116,7 @@ public class WebApplication extends Application<WebConfiguration> {
 
         if (config.getAppMode().equals(Constant.APPMODE_CONTROLLER)) {
             log.info("init controller");
-            Controller controller = new Controller();            
+            Controller controller = new Controller();
             controller.init(config);
             controller.setJmsHandler(jmsHandler);
             registeringMessage.setRole(Constant.APPMODE_CONTROLLER);
@@ -124,7 +124,7 @@ public class WebApplication extends Application<WebConfiguration> {
 
         } else if (config.getAppMode().equals(Constant.APPMODE_BALANCER)) {
             log.info("init balancer");
-            Balancer balancer = new Balancer();            
+            Balancer balancer = new Balancer();
             balancer.init(config);
             balancer.setJmsHandler(jmsHandler);
 

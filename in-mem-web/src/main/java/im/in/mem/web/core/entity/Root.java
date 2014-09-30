@@ -4,10 +4,10 @@
  * and open the template in the editor.
  */
 
-package im.in.mem.web.core;
+package im.in.mem.web.core.entity;
 
 import im.in.mem.web.WebConfiguration;
-import im.in.mem.web.jms.JmsHandler;
+import im.in.mem.web.core.jms.JmsHandler;
 
 
 public class Root {

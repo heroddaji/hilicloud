@@ -6,7 +6,7 @@
 
 package im.in.mem.web.hypervisor;
 
-import im.in.mem.web.jms.JmsHandler;
+import im.in.mem.web.core.jms.JmsHandler;
 
 
 public class Hypervisor {

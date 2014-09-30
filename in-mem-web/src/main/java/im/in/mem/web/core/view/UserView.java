@@ -3,9 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package im.in.mem.web.view;
+package im.in.mem.web.core.view;
 
-import im.in.mem.web.dao.User;
+
+import im.in.mem.web.core.entity.User;
 import io.dropwizard.views.View;
 
 
