@@ -10,12 +10,11 @@ import com.mongodb.MongoClient;
 import im.in.mem.web.core.dao.UserDAO;
 import im.in.mem.web.core.entity.User;
 
-
 import im.in.mem.web.core.view.UserView;
 import java.net.UnknownHostException;
+import java.util.LinkedList;
 import java.util.List;
 import javax.ws.rs.GET;
-
 
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -29,53 +28,63 @@ import org.mongodb.morphia.query.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@Path("/users")
-@Produces(MediaType.APPLICATION_JSON)
+@Path("users")
+@Produces(MediaType.TEXT_HTML)
 public class UsersRest {
 
-    @QueryParam("query")
-    String param;
-    
     Morphia morphia;
     Datastore ds;
     MongoClient mongoClient;
     String dbName = "hilicloud";
-    
+
     private final Logger log = LoggerFactory.getLogger(getClass());
-    
-    public UsersRest(){
-        
+
+    public UsersRest() {
+
         try {
             mongoClient = new MongoClient();
-            morphia = new Morphia();        
+            morphia = new Morphia();
             ds = morphia.createDatastore(mongoClient, dbName);
         } catch (UnknownHostException ex) {
             log.error(ex.getMessage());
         }
     }
-    
-    @GET    
+
+    @GET
     public List<User> getAllUsers() {
-        Query q = ds.find(User.class);        
+        Query q = ds.find(User.class);
         return q.asList();
     }
-    
+
     @GET
     @Path("/{username}")
-    public UserView getUser(@PathParam("username") Optional<String> username){          
-          
-          if(username.isPresent()){
-              UserDAO userDao = new UserDAO(User.class, mongoClient, morphia, dbName);
-              User user = userDao.findOne("username", username.get());
-              return new UserView(user);
-          }
-          
-          return new UserView(new User());
+    public UserView getUserView(@PathParam("username") String username) {
+
+        UserDAO userDao = new UserDAO(User.class, mongoClient, morphia, dbName);
+        User user = userDao.findOne("username", username);
+        return new UserView(user);
+
     }
-    
-    @Path("/{email}")
-    public User getUser(@PathParam("email") String email){
-        return null;
+
+    @GET
+    @Path("/json/{username}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public User getUserJson(@PathParam("username") String username) {
+
+        UserDAO userDao = new UserDAO(User.class, mongoClient, morphia, dbName);
+        User user = userDao.findOne("username", username);
+        return user;
+
+    }
+
+    @GET
+    @Path("all")
+    public UserView fetch() {
+        List<User> users = new LinkedList<>();
+        users.add(new User().setUsername("user1"));
+        users.add(new User().setUsername("user2"));
+
+        return new UserView(users);
     }
 
 }

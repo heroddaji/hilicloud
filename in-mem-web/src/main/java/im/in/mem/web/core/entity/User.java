@@ -11,8 +11,11 @@ import org.mongodb.morphia.annotations.Id;
 public class User{    
     
     @Id private ObjectId id;
+    @JsonProperty
     private String username;
+    @JsonProperty
     private String role;
+    @JsonProperty
     private String password;
 
     public User() {
@@ -25,31 +28,34 @@ public class User{
     }
 
     
-    @JsonProperty
+    
     public String getUsername() {
         return username;
     }
 
-    public void setUsername(String username) {
+    public User setUsername(String username) {
         this.username = username;
+        return this;
     }
 
-    @JsonProperty
+    
     public String getRole() {
         return role;
     }
 
-    public void setRole(String role) {
+    public User setRole(String role) {
         this.role = role;
+        return this;
     }
 
-    @JsonProperty
+    
     public String getPassword() {
         return password;
     }
 
-    public void setPassword(String password) {
+    public User setPassword(String password) {
         this.password = password;
+        return this;
     }
     
     

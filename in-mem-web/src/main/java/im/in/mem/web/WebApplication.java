@@ -71,7 +71,7 @@ public class WebApplication extends Application<WebConfiguration> {
 
             this.config = _config;
         //    jmsHandler.init(_config);
-            final HiLiCloudRest hiliResource = new HiLiCloudRest(config.getTemplate(), config.getDefaultName());
+           final HiLiCloudRest hiliResource = new HiLiCloudRest(config.getTemplate(), config.getDefaultName());
             final UsersRest userResource = new UsersRest();
 
             final TemplateHealthCheck healthCheck = new TemplateHealthCheck(config.getTemplate());
